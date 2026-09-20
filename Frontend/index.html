@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>ConnectHub - Home</title>
+
+    <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body>
+
+    <!-- Navbar -->
+    <nav class="navbar">
+
+        <div class="nav-container">
+
+            <a href="index.html" class="logo">
+                ConnectHub
+            </a>
+
+            <div class="nav-links">
+
+                <a href="index.html">
+                    Home
+                </a>
+
+                <a href="profile.html">
+                    Profile
+                </a>
+
+                <button id="logoutBtn" class="logout-btn">
+                    Logout
+                </button>
+
+            </div>
+
+        </div>
+
+    </nav>
+
+
+    <!-- Main Content -->
+    <main class="main-container">
+
+        <!-- Welcome Section -->
+        <section class="welcome-section">
+
+            <h2 id="welcomeText">
+                Welcome to ConnectHub
+            </h2>
+
+            <p>
+                Connect, share and discover.
+            </p>
+
+        </section>
+
+
+        <!-- Create Post -->
+        <section class="create-post-card">
+
+            <div class="create-post-header">
+
+                <div class="user-avatar" id="userAvatar">
+                    U
+                </div>
+
+                <div>
+                    <h3 id="postUserName">
+                        Create a post
+                    </h3>
+
+                    <p>
+                        Share something with your community
+                    </p>
+                </div>
+
+            </div>
+
+            <textarea
+                id="postContent"
+                placeholder="What's on your mind?"
+                rows="4"
+            ></textarea>
+
+            <div class="create-post-footer">
+
+                <span>
+                    🌎 Public
+                </span>
+
+                <button id="createPostBtn">
+                    Post
+                </button>
+
+            </div>
+
+        </section>
+
+
+        <!-- Feed -->
+        <section class="feed-section">
+
+    <h2 class="section-title">
+        Your Feed
+    </h2>
+
+    <div id="feed">
+        <!-- Posts loaded from MongoDB -->
+    </div>
+
+</section>
+
+    </main>
+
+
+    <script src="js/feed.js"></script>
+
+</body>
+
+</html>
