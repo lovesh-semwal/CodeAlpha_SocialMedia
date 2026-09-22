@@ -129,13 +129,13 @@ Open the frontend/index.html file using VS Code Live Server.
 
 ## 🎯 Future Improvements
 
-🔔 Notifications
-📸 Real image uploads using Cloudinary
-💬 Real-time messaging
-🌙 Dark mode
-❤️ Post reaction system
-🔔 Real-time notifications
-🚀 Deployment with MongoDB Atlas & Render
+- 🔔 Notifications
+- 📸 Real image uploads using Cloudinary
+- 💬 Real-time messaging
+- 🌙 Dark mode
+- ❤️ Post reaction system
+- 🔔 Real-time notifications
+- 🚀 Deployment with MongoDB Atlas & Render
 
 ## 👨‍💻 Author
 
