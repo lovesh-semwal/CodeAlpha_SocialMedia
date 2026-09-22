@@ -133,4 +133,110 @@ router.put("/:id/like", authMiddleware, async (req, res) => {
 
 
 
+// ===============================
+// Edit Post
+// ===============================
+
+router.put("/:id", authMiddleware, async (req, res) => {
+    try {
+        const { content } = req.body;
+
+        if (!content || !content.trim()) {
+            return res.status(400).json({
+                message: "Post content is required"
+            });
+        }
+
+        const post = await Post.findById(req.params.id);
+
+        if (!post) {
+            return res.status(404).json({
+                message: "Post not found"
+            });
+        }
+
+        // Only post owner can edit
+        if (
+            post.author.toString() !==
+            req.userId.toString()
+        ) {
+            return res.status(403).json({
+                message: "You can only edit your own post"
+            });
+        }
+
+        post.content = content.trim();
+
+        await post.save();
+
+        const updatedPost =
+            await Post.findById(post._id)
+                .populate(
+                    "author",
+                    "name username profileImage"
+                );
+
+        res.status(200).json({
+            message: "Post updated successfully",
+            post: updatedPost
+        });
+
+    } catch (error) {
+        console.log(error);
+
+        res.status(500).json({
+            message: "Server error"
+        });
+    }
+});
+
+
+// ===============================
+// Delete Post
+// ===============================
+
+router.delete("/:id", authMiddleware, async (req, res) => {
+    try {
+        const post = await Post.findById(req.params.id);
+
+        if (!post) {
+            return res.status(404).json({
+                message: "Post not found"
+            });
+        }
+
+        // Only post owner can delete
+        if (
+            post.author.toString() !==
+            req.userId.toString()
+        ) {
+            return res.status(403).json({
+                message: "You can only delete your own post"
+            });
+        }
+
+        await Post.findByIdAndDelete(req.params.id);
+
+        // Also delete comments belonging to this post
+        const Comment = require("../models/Comment");
+
+        await Comment.deleteMany({
+            post: req.params.id
+        });
+
+        res.status(200).json({
+            message: "Post deleted successfully"
+        });
+
+    } catch (error) {
+        console.log(error);
+
+        res.status(500).json({
+            message: "Server error"
+        });
+    }
+});
+
+
+
 module.exports = router;

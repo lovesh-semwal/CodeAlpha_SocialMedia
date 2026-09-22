@@ -7,6 +7,7 @@ const authRoutes = require("./routes/authRoutes");
 const authMiddleware = require("./middleware/authMiddleware");
 const postRoutes = require("./routes/postRoutes");
 const commentRoutes = require("./routes/commentRoutes");
+const userRoutes = require("./routes/userRoutes");
 
 const app = express();
 
@@ -28,6 +29,7 @@ mongoose
 app.use("/api/auth", authRoutes);
 app.use("/api/posts", postRoutes);
 app.use("/api",commentRoutes);
+app.use("/api/users", userRoutes);
 
 app.get("/api/protected", authMiddleware, (req, res) => {
     res.json({

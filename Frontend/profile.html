@@ -1,47 +1,46 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>ConnectHub - Profile</title>
+    <title>Profile - ConnectHub</title>
 
     <link rel="stylesheet" href="css/style.css">
 </head>
 
 <body>
 
+    <!-- Navbar -->
+
     <nav class="navbar">
 
-        <div class="nav-container">
+        <div class="logo">
+            ConnectHub
+        </div>
 
-            <a href="index.html" class="logo">
-                ConnectHub
+        <div class="nav-links">
+
+            <a href="index.html">
+                Home
             </a>
 
-            <div class="nav-links">
+            <a href="profile.html">
+                Profile
+            </a>
 
-                <a href="index.html">
-                    Home
-                </a>
-
-                <a href="profile.html">
-                    Profile
-                </a>
-
-                <button id="logoutBtn" class="logout-btn">
-                    Logout
-                </button>
-
-            </div>
+            <button id="logoutBtn">
+                Logout
+            </button>
 
         </div>
 
     </nav>
 
 
-    <main class="main-container">
+    <!-- Profile -->
+
+    <main class="profile-page">
 
         <section class="profile-card">
 
@@ -50,27 +49,34 @@
             </div>
 
             <h1 id="profileName">
-                User
+                Loading...
             </h1>
 
-            <p id="profileUsername">
+            <p class="profile-username" id="profileUsername">
                 @username
             </p>
 
-            <p id="profileBio">
-                No bio yet.
+            <p class="profile-bio" id="profileBio">
+                No bio added yet.
             </p>
+
 
             <div class="profile-stats">
 
                 <div>
-                    <strong id="followersCount">
+                    <strong id="postCount">
                         0
                     </strong>
 
-                    <span>
-                        Followers
-                    </span>
+                    <span>Posts</span>
+                </div>
+
+                <div>
+                    <strong id="followerCount">
+                        0
+                    </strong>
+
+                    <span>Followers</span>
                 </div>
 
                 <div>
@@ -78,10 +84,127 @@
                         0
                     </strong>
 
-                    <span>
-                        Following
-                    </span>
+                    <span>Following</span>
                 </div>
+
+            </div>
+
+
+            <div class="profile-buttons">
+
+    <button
+        class="edit-profile-btn"
+        id="editProfileBtn"
+    >
+        Edit Profile
+    </button>
+
+    <button
+        class="follow-btn"
+        id="followBtn"
+    >
+        Follow
+    </button>
+
+</div>
+
+        </section>
+
+
+        <!-- Edit Profile -->
+
+        <section
+            class="edit-profile-card"
+            id="editProfileCard"
+        >
+
+            <h2>
+                Edit Profile
+            </h2>
+
+            <form id="profileForm">
+
+                <label>
+                    Name
+                </label>
+
+                <input
+                    type="text"
+                    id="nameInput"
+                    required
+                >
+
+
+                <label>
+                    Username
+                </label>
+
+                <input
+                    type="text"
+                    id="usernameInput"
+                    required
+                >
+
+
+                <label>
+                    Bio
+                </label>
+
+                <textarea
+                    id="bioInput"
+                    maxlength="200"
+                    rows="4"
+                    placeholder="Tell something about yourself..."
+                ></textarea>
+
+
+                <label>
+                    Profile Image URL
+                </label>
+
+                <input
+                    type="text"
+                    id="profileImageInput"
+                    placeholder="https://example.com/image.jpg"
+                >
+
+
+                <div class="profile-form-buttons">
+
+                    <button
+                        type="submit"
+                        id="saveProfileBtn"
+                    >
+                        Save Changes
+                    </button>
+
+                    <button
+                        type="button"
+                        id="cancelEditBtn"
+                    >
+                        Cancel
+                    </button>
+
+                </div>
+
+            </form>
+
+        </section>
+
+
+        <!-- User Posts -->
+
+        <section class="profile-posts">
+
+            <h2>
+                My Posts
+            </h2>
+
+            <div id="profilePosts">
+
+                <p>
+                    Loading posts...
+                </p>
 
             </div>
 
@@ -93,5 +216,4 @@
     <script src="js/profile.js"></script>
 
 </body>
-
 </html>

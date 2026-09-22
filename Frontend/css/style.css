@@ -586,3 +586,384 @@ body {
     color: #6b7280;
     font-size: 14px;
 }
+
+
+/* =========================
+   Profile Page
+========================= */
+
+.profile-page {
+    max-width: 900px;
+    margin: 40px auto;
+    padding: 0 20px;
+}
+
+.profile-card {
+    background: white;
+    border-radius: 16px;
+    padding: 35px;
+    text-align: center;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+}
+
+.profile-avatar {
+    width: 100px;
+    height: 100px;
+    margin: 0 auto 15px;
+    border-radius: 50%;
+    background: #4f46e5;
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 38px;
+    font-weight: 700;
+    overflow: hidden;
+}
+
+.profile-avatar img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.profile-card h1 {
+    margin: 10px 0 5px;
+}
+
+.profile-username {
+    color: #6b7280;
+    margin: 0;
+}
+
+.profile-bio {
+    margin: 15px auto;
+    color: #374151;
+    max-width: 500px;
+}
+
+.profile-stats {
+    display: flex;
+    justify-content: center;
+    gap: 60px;
+    margin: 25px 0;
+}
+
+.profile-stats div {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.profile-stats strong {
+    font-size: 20px;
+}
+
+.profile-stats span {
+    color: #6b7280;
+    font-size: 14px;
+}
+
+.edit-profile-btn {
+    border: none;
+    background: #4f46e5;
+    color: white;
+    padding: 10px 20px;
+    border-radius: 8px;
+    cursor: pointer;
+}
+
+.edit-profile-btn:hover {
+    opacity: 0.9;
+}
+
+
+/* =========================
+   Edit Profile
+========================= */
+
+.edit-profile-card {
+    display: none;
+    background: white;
+    margin-top: 20px;
+    padding: 25px;
+    border-radius: 16px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+}
+
+.edit-profile-card.show {
+    display: block;
+}
+
+.edit-profile-card h2 {
+    margin-bottom: 20px;
+}
+
+.edit-profile-card form {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.edit-profile-card label {
+    font-weight: 600;
+    margin-top: 8px;
+}
+
+.edit-profile-card input,
+.edit-profile-card textarea {
+    padding: 11px 12px;
+    border: 1px solid #d1d5db;
+    border-radius: 8px;
+    outline: none;
+    font-size: 14px;
+}
+
+.edit-profile-card input:focus,
+.edit-profile-card textarea:focus {
+    border-color: #4f46e5;
+}
+
+.profile-form-buttons {
+    display: flex;
+    gap: 10px;
+    margin-top: 15px;
+}
+
+.profile-form-buttons button {
+    padding: 10px 18px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+}
+
+#saveProfileBtn {
+    background: #4f46e5;
+    color: white;
+}
+
+#cancelEditBtn {
+    background: #e5e7eb;
+    color: #111827;
+}
+
+
+/* =========================
+   Profile Posts
+========================= */
+
+.profile-posts {
+    margin-top: 30px;
+}
+
+.profile-posts h2 {
+    margin-bottom: 15px;
+}
+
+.profile-posts .post-card {
+    margin-bottom: 15px;
+}
+
+
+/* =========================
+   Mobile
+========================= */
+
+@media (max-width: 600px) {
+
+    .profile-page {
+        margin-top: 20px;
+        padding: 0 12px;
+    }
+
+    .profile-card {
+        padding: 25px 15px;
+    }
+
+    .profile-stats {
+        gap: 30px;
+    }
+
+    .profile-form-buttons {
+        flex-direction: column;
+    }
+
+}
+
+
+/* =========================
+   Post Menu
+========================= */
+
+.post-header {
+    position: relative;
+}
+
+.post-menu {
+    margin-left: auto;
+    display: flex;
+    gap: 6px;
+}
+
+.edit-post-btn,
+.delete-post-btn {
+    border: none;
+    background: transparent;
+    cursor: pointer;
+    font-size: 16px;
+    padding: 6px;
+    border-radius: 6px;
+}
+
+.edit-post-btn:hover {
+    background: #eef2ff;
+}
+
+.delete-post-btn:hover {
+    background: #fee2e2;
+}
+
+/* =========================
+   User Search
+========================= */
+
+.search-container {
+    position: relative;
+    width: 280px;
+}
+
+#userSearchInput {
+    width: 100%;
+    padding: 9px 14px;
+    border: 1px solid #d1d5db;
+    border-radius: 20px;
+    outline: none;
+    font-size: 14px;
+}
+
+#userSearchInput:focus {
+    border-color: #4f46e5;
+}
+
+.search-results {
+    display: none;
+    position: absolute;
+    top: 45px;
+    left: 0;
+    right: 0;
+    background: white;
+    border-radius: 10px;
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.15);
+    overflow: hidden;
+    z-index: 1000;
+}
+
+.search-results.show {
+    display: block;
+}
+
+.search-user {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 12px;
+    cursor: pointer;
+}
+
+.search-user:hover {
+    background: #f3f4f6;
+}
+
+.search-user-avatar {
+    width: 38px;
+    height: 38px;
+    min-width: 38px;
+    border-radius: 50%;
+    background: #4f46e5;
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 600;
+    overflow: hidden;
+}
+
+.search-user-avatar img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.search-user-info {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.search-user-info strong {
+    font-size: 14px;
+}
+
+.search-user-info span {
+    color: #6b7280;
+    font-size: 12px;
+}
+
+.search-message {
+    padding: 15px;
+    margin: 0;
+    color: #6b7280;
+    font-size: 14px;
+}
+
+
+/* =========================
+   Mobile Search
+========================= */
+
+@media (max-width: 700px) {
+
+    .search-container {
+        width: 180px;
+    }
+
+}
+
+
+
+/* =========================
+   Profile Buttons
+========================= */
+
+.profile-buttons {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    margin-top: 15px;
+}
+
+.follow-btn {
+    display: none;
+    border: none;
+    background: #4f46e5;
+    color: white;
+    padding: 10px 22px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 600;
+}
+
+.follow-btn:hover {
+    opacity: 0.9;
+}
+
+.follow-btn.following {
+    background: #e5e7eb;
+    color: #111827;
+}
+
+.follow-btn:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}

@@ -165,6 +165,229 @@ if (createPostBtn) {
 }
 
 
+// ===============================
+// User Search
+// ===============================
+
+const userSearchInput =
+    document.getElementById("userSearchInput");
+
+const searchResults =
+    document.getElementById("searchResults");
+
+
+if (userSearchInput) {
+
+    userSearchInput.addEventListener(
+        "input",
+        async () => {
+
+            const query =
+                userSearchInput.value.trim();
+
+
+            if (!query) {
+
+                searchResults.innerHTML = "";
+
+                searchResults.classList.remove(
+                    "show"
+                );
+
+                return;
+            }
+
+
+            try {
+
+                const response =
+                    await fetch(
+                        `${API_URL}/users/search?q=${encodeURIComponent(query)}`,
+                        {
+                            method: "GET",
+
+                            headers: {
+                                "Authorization":
+                                    `Bearer ${token}`
+                            }
+                        }
+                    );
+
+
+                const data =
+                    await response.json();
+
+
+                if (!response.ok) {
+
+                    searchResults.innerHTML = `
+                        <p class="search-message">
+                            ${escapeHTML(
+                                data.message ||
+                                "Search failed."
+                            )}
+                        </p>
+                    `;
+
+                    searchResults.classList.add(
+                        "show"
+                    );
+
+                    return;
+                }
+
+
+                displaySearchResults(
+                    data.users || []
+                );
+
+
+            } catch (error) {
+
+                console.error(
+                    "User search error:",
+                    error
+                );
+
+                searchResults.innerHTML = `
+                    <p class="search-message">
+                        Unable to search users.
+                    </p>
+                `;
+
+                searchResults.classList.add(
+                    "show"
+                );
+            }
+        }
+    );
+}
+
+
+// ===============================
+// Display Search Results
+// ===============================
+
+function displaySearchResults(users) {
+
+    searchResults.innerHTML = "";
+
+
+    if (users.length === 0) {
+
+        searchResults.innerHTML = `
+            <p class="search-message">
+                No users found.
+            </p>
+        `;
+
+        searchResults.classList.add(
+            "show"
+        );
+
+        return;
+    }
+
+
+    users.forEach(foundUser => {
+
+        const userElement =
+            document.createElement("div");
+
+        userElement.className =
+            "search-user";
+
+
+        const firstLetter =
+            foundUser.name
+                ?.charAt(0)
+                ?.toUpperCase() || "U";
+
+
+        userElement.innerHTML = `
+
+            <div class="search-user-avatar">
+
+                ${
+                    foundUser.profileImage
+                    ? `
+                        <img
+                            src="${escapeHTML(
+                                foundUser.profileImage
+                            )}"
+                            alt="Profile"
+                        >
+                    `
+                    : firstLetter
+                }
+
+            </div>
+
+
+            <div class="search-user-info">
+
+                <strong>
+                    ${escapeHTML(
+                        foundUser.name
+                    )}
+                </strong>
+
+                <span>
+                    @${escapeHTML(
+                        foundUser.username
+                    )}
+                </span>
+
+            </div>
+
+        `;
+
+
+        userElement.addEventListener(
+            "click",
+            () => {
+
+                window.location.href =
+                    `profile.html?id=${foundUser._id}`;
+            }
+        );
+
+
+        searchResults.appendChild(
+            userElement
+        );
+
+    });
+
+
+    searchResults.classList.add(
+        "show"
+    );
+}
+
+
+// ===============================
+// Close Search
+// ===============================
+
+document.addEventListener(
+    "click",
+    event => {
+
+        if (
+            !event.target.closest(
+                ".search-container"
+            )
+        ) {
+
+            searchResults?.classList.remove(
+                "show"
+            );
+        }
+    }
+);
+
+
 // =========================
 // Load Posts
 // =========================
@@ -270,11 +493,6 @@ function createPostElement(post) {
 
     article.className = "post-card";
 
-
-    // =========================
-    // Author Information
-    // =========================
-
     const authorName =
         post.author?.name || "Unknown User";
 
@@ -284,37 +502,31 @@ function createPostElement(post) {
     const firstLetter =
         authorName.charAt(0).toUpperCase();
 
-
-    // =========================
-    // Like Information
-    // =========================
-
     const likesCount =
         post.likes?.length || 0;
 
     const currentUserId =
         user._id || user.id;
 
+    const postAuthorId =
+        post.author?._id;
+
+    const isOwner =
+        postAuthorId &&
+        postAuthorId.toString() ===
+        currentUserId.toString();
+
     const isLiked =
         post.likes?.some(
-            id => id.toString() === currentUserId.toString()
+            id => id.toString() ===
+                currentUserId.toString()
         );
-
-
-    // =========================
-    // Date
-    // =========================
 
     const postDate =
         formatPostDate(post.createdAt);
 
 
-    // =========================
-    // Post HTML
-    // =========================
-
     article.innerHTML = `
-
         <div class="post-header">
 
             <div class="user-avatar">
@@ -328,17 +540,40 @@ function createPostElement(post) {
                 </h3>
 
                 <p>
-                    @${escapeHTML(username)} · ${postDate}
+                    @${escapeHTML(username)}
+                    · ${postDate}
                 </p>
 
             </div>
+
+            ${
+                isOwner
+                    ? `
+                    <div class="post-menu">
+
+                        <button
+                            class="edit-post-btn"
+                        >
+                            ✏️
+                        </button>
+
+                        <button
+                            class="delete-post-btn"
+                        >
+                            🗑️
+                        </button>
+
+                    </div>
+                    `
+                    : ""
+            }
 
         </div>
 
 
         <div class="post-content">
 
-            <p>
+            <p class="post-text">
                 ${escapeHTML(post.content)}
             </p>
 
@@ -347,18 +582,22 @@ function createPostElement(post) {
 
         <div class="post-actions">
 
-            <button 
+            <button
                 class="like-btn ${isLiked ? "liked" : ""}"
             >
                 ❤️ Like
+
                 <span class="like-count">
                     ${likesCount}
                 </span>
+
             </button>
+
 
             <button class="comment-btn">
                 💬 Comment
             </button>
+
 
             <button class="share-btn">
                 ↗ Share
@@ -366,8 +605,6 @@ function createPostElement(post) {
 
         </div>
 
-
-        <!-- Comments Section -->
 
         <div class="comments-section">
 
@@ -380,7 +617,9 @@ function createPostElement(post) {
                     maxlength="500"
                 />
 
-                <button class="comment-submit-btn">
+                <button
+                    class="comment-submit-btn"
+                >
                     Post
                 </button>
 
@@ -396,64 +635,66 @@ function createPostElement(post) {
             </div>
 
         </div>
-
     `;
 
 
-    // =========================
-    // Like Button
-    // =========================
+    // ===============================
+    // Like
+    // ===============================
 
     const likeBtn =
         article.querySelector(".like-btn");
 
+    likeBtn.addEventListener(
+        "click",
+        () => {
+            handleLike(
+                post._id,
+                likeBtn
+            );
+        }
+    );
 
-    likeBtn.addEventListener("click", () => {
 
-        handleLike(post._id, likeBtn);
-
-    });
-
-
-    // =========================
-    // Comment Button
-    // =========================
+    // ===============================
+    // Comments
+    // ===============================
 
     const commentBtn =
         article.querySelector(".comment-btn");
 
     const commentsSection =
-        article.querySelector(".comments-section");
+        article.querySelector(
+            ".comments-section"
+        );
 
+    commentBtn.addEventListener(
+        "click",
+        () => {
 
-    commentBtn.addEventListener("click", () => {
-
-        commentsSection.classList.toggle("show");
-
-
-        if (
-            commentsSection.classList.contains("show")
-        ) {
-
-            loadComments(
-                post._id,
-                article
+            commentsSection.classList.toggle(
+                "show"
             );
 
+            if (
+                commentsSection.classList.contains(
+                    "show"
+                )
+            ) {
+
+                loadComments(
+                    post._id,
+                    article
+                );
+            }
         }
+    );
 
-    });
-
-
-    // =========================
-    // Submit Comment
-    // =========================
 
     const commentSubmitBtn =
         article.querySelector(
             ".comment-submit-btn"
         );
-
 
     const commentInput =
         article.querySelector(
@@ -469,15 +710,13 @@ function createPostElement(post) {
                 post._id,
                 article
             );
-
         }
     );
 
 
-    // Allow Enter to submit
     commentInput.addEventListener(
         "keydown",
-        (event) => {
+        event => {
 
             if (
                 event.key === "Enter" &&
@@ -490,11 +729,54 @@ function createPostElement(post) {
                     post._id,
                     article
                 );
-
             }
-
         }
     );
+
+
+    // ===============================
+    // Edit Post
+    // ===============================
+
+    if (isOwner) {
+
+        const editBtn =
+            article.querySelector(
+                ".edit-post-btn"
+            );
+
+        editBtn.addEventListener(
+            "click",
+            () => {
+
+                editPost(
+                    post._id,
+                    article,
+                    post.content
+                );
+            }
+        );
+
+
+        // ===============================
+        // Delete Post
+        // ===============================
+
+        const deleteBtn =
+            article.querySelector(
+                ".delete-post-btn"
+            );
+
+        deleteBtn.addEventListener(
+            "click",
+            () => {
+
+                deletePost(
+                    post._id
+                );
+            }
+        );
+    }
 
 
     return article;
@@ -885,70 +1167,161 @@ async function deleteComment(
 
 
 
-async function handleLike(postId, likeBtn) {
+// ===============================
+// Edit Post
+// ===============================
+
+async function editPost(
+    postId,
+    article,
+    oldContent
+) {
+
+    const newContent =
+        prompt(
+            "Edit your post:",
+            oldContent
+        );
+
+    if (newContent === null) {
+        return;
+    }
+
+    const content =
+        newContent.trim();
+
+    if (!content) {
+        alert("Post cannot be empty.");
+        return;
+    }
 
     try {
 
-        likeBtn.disabled = true;
+        const response =
+            await fetch(
+                `${API_URL}/posts/${postId}`,
+                {
+                    method: "PUT",
 
+                    headers: {
+                        "Content-Type":
+                            "application/json",
 
-        const response = await fetch(
-            `${API_URL}/posts/${postId}/like`,
-            {
-                method: "PUT",
+                        "Authorization":
+                            `Bearer ${token}`
+                    },
 
-                headers: {
-                    "Authorization": `Bearer ${token}`
+                    body: JSON.stringify({
+                        content
+                    })
                 }
-            }
-        );
+            );
 
 
-        const data = await response.json();
+        const data =
+            await response.json();
 
 
         if (!response.ok) {
 
-            alert(data.message || "Failed to like post.");
+            alert(
+                data.message ||
+                "Failed to edit post."
+            );
 
             return;
         }
 
 
-        // Update like count
-        const likeCount =
-            likeBtn.querySelector(".like-count");
+        const postText =
+            article.querySelector(
+                ".post-text"
+            );
 
-        if (likeCount) {
-            likeCount.textContent =
-                data.likesCount;
-        }
-
-
-        // Update button state
-        if (data.liked) {
-
-            likeBtn.classList.add("liked");
-
-        } else {
-
-            likeBtn.classList.remove("liked");
-
-        }
+        postText.textContent =
+            data.post.content;
 
 
     } catch (error) {
 
-        console.error("Like error:", error);
+        console.error(
+            "Edit post error:",
+            error
+        );
 
-        alert("Unable to connect to server.");
+        alert(
+            "Unable to connect to server."
+        );
+    }
+}
 
-    } finally {
 
-        likeBtn.disabled = false;
+// ===============================
+// Delete Post
+// ===============================
 
+async function deletePost(postId) {
+
+    const confirmed =
+        confirm(
+            "Are you sure you want to delete this post?"
+        );
+
+    if (!confirmed) {
+        return;
     }
 
+
+    try {
+
+        const response =
+            await fetch(
+                `${API_URL}/posts/${postId}`,
+                {
+                    method: "DELETE",
+
+                    headers: {
+                        "Authorization":
+                            `Bearer ${token}`
+                    }
+                }
+            );
+
+
+        const data =
+            await response.json();
+
+
+        if (!response.ok) {
+
+            alert(
+                data.message ||
+                "Failed to delete post."
+            );
+
+            return;
+        }
+
+
+        alert(
+            "Post deleted successfully."
+        );
+
+
+        await loadPosts();
+
+
+    } catch (error) {
+
+        console.error(
+            "Delete post error:",
+            error
+        );
+
+        alert(
+            "Unable to connect to server."
+        );
+    }
 }
 
 

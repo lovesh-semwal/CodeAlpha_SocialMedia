@@ -15,31 +15,43 @@
     <!-- Navbar -->
     <nav class="navbar">
 
-        <div class="nav-container">
+    <div class="logo">
+        ConnectHub
+    </div>
 
-            <a href="index.html" class="logo">
-                ConnectHub
-            </a>
+    <div class="search-container">
 
-            <div class="nav-links">
+        <input
+            type="text"
+            id="userSearchInput"
+            placeholder="Search users..."
+            autocomplete="off"
+        >
 
-                <a href="index.html">
-                    Home
-                </a>
+        <div
+            id="searchResults"
+            class="search-results"
+        ></div>
 
-                <a href="profile.html">
-                    Profile
-                </a>
+    </div>
 
-                <button id="logoutBtn" class="logout-btn">
-                    Logout
-                </button>
+    <div class="nav-links">
 
-            </div>
+        <a href="index.html">
+            Home
+        </a>
 
-        </div>
+        <a href="profile.html">
+            Profile
+        </a>
 
-    </nav>
+        <button id="logoutBtn">
+            Logout
+        </button>
+
+    </div>
+
+</nav>
 
 
     <!-- Main Content -->
